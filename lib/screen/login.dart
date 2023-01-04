@@ -10,11 +10,43 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
+    var setSize = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
-      body: const Text('Hello Login'),
-    );
+        appBar: AppBar(
+          title: const Text('Login'),
+        ),
+        body: Container(
+          alignment: Alignment.center,
+          width: setSize.width,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Email',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Password',
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ));
   }
 }

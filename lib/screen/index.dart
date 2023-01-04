@@ -31,6 +31,9 @@ class Index extends StatelessWidget {
                   child: const Text('Login'),
                   onPressed: () => {Navigator.pushNamed(context, '/login')},
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

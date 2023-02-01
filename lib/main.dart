@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:utcapp/screen/dashboard.dart';
 import 'package:utcapp/screen/index.dart';
 import 'package:utcapp/screen/login.dart';
 import 'package:utcapp/screen/register.dart';
@@ -20,9 +21,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => Index(),
-        '/login': (context) => const Login(),
-        '/register': (context) => const Register(),
+        '/': (context) => const Dashboard(),
+        // '/login': (context) => const Login(),
+        // '/register': (context) => const Register(),
+        // '/dashboard': (context) => const Dashboard(),
       },
     );
   }

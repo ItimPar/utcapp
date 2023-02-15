@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:utcapp/localStorage/database.dart';
+import 'package:utcapp/screen/dashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -10,11 +12,31 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  var email, password;
+
+  Future<void> checkUser(email, password) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        print('Success');
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+          builder: (BuildContext context) {
+            return const Dashboard();
+          },
+        );
+        Navigator.of(context)
+            .pushAndRemoveUntil(materialPageRoute, (route) => false)
+            .catchError((onError) {
+          print(onError);
+        });
+      });
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var email, password;
 
     return Scaffold(
         appBar: AppBar(
@@ -90,17 +112,18 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      var local = DBLocal();
-                      local.login(email, password).then((value) {
-                        if (value) {
-                          _formKey.currentState!.reset();
-                          Navigator.pushNamed(context, '/dashboard');
-                        } else {
-                          print('Fail');
-                          final bar = SnackBar(content: Text("ไม่พบข้อมูล"));
-                          ScaffoldMessenger.of(context).showSnackBar(bar);
-                        }
-                      });
+                      checkUser(email, password);
+                      // var local = DBLocal();
+                      // local.login(email, password).then((value) {
+                      //   if (value) {
+                      //     _formKey.currentState!.reset();
+                      //     Navigator.pushNamed(context, '/dashboard');
+                      //   } else {
+                      //     print('Fail');
+                      //     final bar = SnackBar(content: Text("ไม่พบข้อมูล"));
+                      //     ScaffoldMessenger.of(context).showSnackBar(bar);
+                      //   }
+                      // });
                     }
                   },
                 ),

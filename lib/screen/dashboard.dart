@@ -36,6 +36,46 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            // Menu
+            const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                ),
+                child: Text(
+                  'Menu',
+                  style: TextStyle(fontSize: 20),
+                )),
+
+            // Video
+            ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/video');
+              },
+              leading: const Icon(Icons.video_collection),
+              title: const Text('Video'),
+            ),
+            // Image
+            ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/image');
+              },
+              leading: const Icon(Icons.photo_library_rounded),
+              title: const Text('Image'),
+            ),
+            // Location
+            ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, '/location');
+              },
+              leading: const Icon(Icons.map_sharp),
+              title: const Text('Location'),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: Row(children: const [
           Icon(Icons.api),
@@ -47,7 +87,6 @@ class _DashboardState extends State<Dashboard> {
           future: callAPI(),
           builder: (context, snapshot) {
             return Column(
-              
               children: [
                 const SizedBox(
                   height: 30,

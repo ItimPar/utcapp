@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:utcapp/package/video.dart';
+import 'package:utcapp/package/images.dart';
+import 'package:utcapp/package/location.dart';
 import 'package:utcapp/screen/dashboard.dart';
 import 'package:utcapp/screen/index.dart';
 import 'package:utcapp/screen/login.dart';
 import 'package:utcapp/screen/register.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -22,9 +28,12 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Dashboard(),
-        // '/login': (context) => const Login(),
-        // '/register': (context) => const Register(),
-        // '/dashboard': (context) => const Dashboard(),
+        '/video': (context) => const Video(),
+        '/image': (context) => const Images(),
+        '/location': (context) => const Location(),
+        '/login': (context) => const Login(),
+        '/register': (context) => const Register(),
+        '/dashboard': (context) => const Dashboard(),
       },
     );
   }

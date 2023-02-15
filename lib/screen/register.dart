@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:utcapp/localStorage/database.dart';
+import 'package:utcapp/screen/login.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -10,13 +12,50 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
+  String? name, email, password;
+  var local;
+
+  Future<void> registerFirebase(email, password) async {
+    MaterialPageRoute materialPageRoute;
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((value) => {
+              materialPageRoute = MaterialPageRoute(
+                  builder: (BuildContext context) => const Login()),
+              Navigator.of(context)
+                  .pushAndRemoveUntil(materialPageRoute, (route) => false),
+            })
+        .catchError((onError) {
+      print(onError);
+      var msg = '$onError';
+      showAlert(msg);
+    });
+  }
+
+  void showAlert(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const ListTile(
+              leading: Icon(Icons.error),
+              title: Text('พบข้อผิดพลาด'),
+            ),
+            content: Text(message),
+            actions: [
+              ElevatedButton(
+                  onPressed: (() {
+                    Navigator.of(context).pop();
+                  }),
+                  child: const Text('ปิด'))
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    String? name, email, password;
-    var local;
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Register'),
@@ -34,28 +73,6 @@ class _RegisterState extends State<Register> {
                 const Text(
                   'UTC Register',
                   style: TextStyle(fontSize: 50),
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.people,
-                      color: Colors.deepPurple,
-                      size: size.height * 0.04,
-                    ),
-                    labelText: 'Name',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    name = value;
-                  },
                 ),
                 const SizedBox(
                   height: 30,
@@ -114,8 +131,9 @@ class _RegisterState extends State<Register> {
                     if (_formKey.currentState!.validate())
                       {
                         _formKey.currentState!.save(),
-                        local = DBLocal(),
-                        local.register(name, email, password),
+                        registerFirebase(email, password),
+                        // local = DBLocal(),
+                        // local.register(name, email, password),
                         // print(
                         //     "Name : $name , Email : $email , Password : $password"),
                         _formKey.currentState!.reset(),
